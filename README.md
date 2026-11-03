@@ -1,60 +1,38 @@
 # Parkinson's Disease Detection
 
-This project employs machine learning techniques to detect Parkinson's disease using relevant datasets. The analysis and model development are documented in the Jupyter Notebook `Parkinson_Disease_Detection.ipynb`.
+Detecting Parkinson's disease from voice recordings with classical machine learning. Seven classifiers are trained, tuned and compared on the UCI Parkinsons dataset. College coursework project.
 
-## Features
+## Dataset
 
-- **Data Preprocessing**: Handling missing values, normalizing data, and preparing it for modeling.
-- **Exploratory Data Analysis (EDA)**: Visualizing data distributions and identifying key features.
-- **Model Training**: Implementing classification algorithms to detect Parkinson's disease.
-- **Model Evaluation**: Assessing model performance using metrics like accuracy, precision, and recall.
+[UCI Parkinsons dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data): 195 voice recordings with 22 biomedical voice measures (jitter, shimmer, HNR and others). 147 recordings are from people with Parkinson's and 48 are healthy. The notebook downloads it automatically.
 
-## Technologies Used
+## What the notebook does
 
-- **Programming Language**: Python
-- **Libraries**: Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn
-- **Environment**: Jupyter Notebook
+1. **Preprocessing:** drops the name column, checks for duplicates and missing values (none found)
+2. **EDA:** class balance, correlation heatmap, box plots per class, pair plots of the jitter and shimmer groups
+3. **Balancing and scaling:** SMOTE oversampling (195 to 294 rows), then min-max scaling to [-1, 1] and an 80/20 train/test split
+4. **Models:** Decision Tree, Random Forest, Logistic Regression, SVM, Naive Bayes, KNN, XGBoost, with grid-search hyperparameter tuning for the tree models, SVM and XGBoost
+5. **Evaluation:** classification reports, confusion matrices and ROC curves for each model, and the trained models saved with joblib
 
-## Setup Instructions
+## Results (59-row test set)
 
-### Clone the Repository
+| Model | Test accuracy |
+| --- | --- |
+| Random Forest (tuned) | 0.97 |
+| KNN (k=5) | 0.97 |
+| Decision Tree (tuned) | 0.93 |
+| XGBoost (tuned) | 0.92 |
+| Logistic Regression | 0.83 |
+| SVM (linear, untuned) | 0.81 |
+| Naive Bayes | 0.76 |
 
-```bash
-git clone https://github.com/ThePunisher30/Parkinson-Disease-Detection.git
-```
+## A note on these numbers
 
-### Navigate to the Project Directory
+SMOTE is applied before the train/test split, so synthetic samples built from the test rows' neighbours can end up in training. With only 195 recordings, these scores are likely optimistic. A stricter version would split first and oversample only the training set. This is on my list to fix.
 
-```bash
-cd Parkinson-Disease-Detection
-```
-
-### Install Required Libraries
-
-Ensure that you have Python installed. Install the necessary libraries using pip:
-
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-```
-
-### Open Jupyter Notebook
+## Run it
 
 ```bash
-jupyter notebook
+pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn xgboost joblib requests
+jupyter notebook Parkinson_Disease_Detection.ipynb
 ```
-
-### Run the Notebook
-
-In the Jupyter Notebook interface, open `Parkinson_Disease_Detection.ipynb` and execute the cells to follow the analysis and model development.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions or improvements, please fork the repository and submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-*Note: This README is based on the available information from the repository and may require additional details for complete setup and usage instructions.*
